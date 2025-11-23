@@ -1,0 +1,33 @@
+
+# Git 
+.git/
+
+# Python 
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# OS/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Projecto
+docs/
+k8s/
+compose/
+scripts/
+reports/
+
+# Docker 
+docker-compose*.yml
+
+# Misc 
+*.log
+*.tmp
