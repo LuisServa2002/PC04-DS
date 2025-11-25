@@ -1,6 +1,3 @@
-# Version para el sprint1
-version: "3.8"
-
 services:
   frontend:
     build:
