@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zero-trust-lab
+  labels:
+    name: zero-trust-lab
+    project: zero-trust-network-sandbox
