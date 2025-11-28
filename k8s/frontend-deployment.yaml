@@ -24,7 +24,7 @@ spec:
       containers:
         - name: frontend
           image: compose-frontend:latest
-          imagePullPolicy: Never # Importante: usa la imagen local de Minikube
+          imagePullPolicy: Never # usa la imagen local de minikube
           ports:
             - containerPort: 8080
               name: http

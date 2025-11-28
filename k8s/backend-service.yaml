@@ -7,7 +7,7 @@ metadata:
   labels:
     app: backend
 spec:
-  type: ClusterIP # Importante: solo interno, NO expuesto
+  type: ClusterIP # solo interno, NO expuesto
   selector:
     app: backend
   ports:
