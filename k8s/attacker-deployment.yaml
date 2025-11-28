@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attacker
+  namespace: zero-trust-lab
+  labels:
+    app: attacker
+    component: scanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: attacker
+  template:
+    metadata:
+      labels:
+        app: attacker
+        component: scanner
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: attacker
+          image: compose-attacker:latest
+          imagePullPolicy: Never
+          command: ["sleep", "infinity"]
+          env:
+            - name: SERVICE_NAME
+              value: "attacker"
+            - name: SCAN_MODE
+              value: "kubernetes"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: isolate-attacker
+  namespace: zero-trust-lab
+spec:
+  podSelector:
+    matchLabels:
+      app: attacker
+  policyTypes:
+    - Ingress
+    - Egress
+  # sin reglas, esto significa que el bloqueo es total

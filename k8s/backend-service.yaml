@@ -1,0 +1,17 @@
+apiVersion: v1
+
+kind: Service
+metadata:
+  name: backend
+  namespace: zero-trust-lab
+  labels:
+    app: backend
+spec:
+  type: ClusterIP # solo interno, NO expuesto
+  selector:
+    app: backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+      protocol: TCP
+      name: http
