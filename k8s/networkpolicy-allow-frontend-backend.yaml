@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: zero-trust-lab
+spec:
+  podSelector:
+    matchLabels:
+      app: backend # aplica solo al backend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend # la comunicacion hacia el backend solo esta permitida desde frontend
+      ports:
+        - protocol: TCP
+          port: 5000
+  egress:
+    - {} # permitir todo egress del backend, es necesario para que el backend pueda responder
