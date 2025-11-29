@@ -1,7 +1,7 @@
 .PHONY: help setup venv dev build test lint coverage scan sbom compose-up compose-scan compose-down k8s-apply k8s-scan k8s-clean clean
 
 PYTHON := python3
-VENV := venv
+VENV := .venv
 VENV_BIN := $(VENV)/bin
 PIP := $(VENV_BIN)/pip
 PYTHON_VENV := $(VENV_BIN)/python
@@ -10,7 +10,7 @@ IMAGE_TAG := $(GIT_SHA)
 
 help: ## Mostrar comandos disponibles
 	@echo "Comandos disponibles:"
-	@grep -E '^[a-zA-Z_-]+:.*?##' $(MAKEFILE_LIST) | \
+	@grep -E '^[a-zA-Z**0-9**_-]+:.*?##' $(MAKEFILE_LIST) | \
 	awk 'BEGIN{FS=":.*?##"}{printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 venv: ## Crear entorno virtual Python
@@ -129,6 +129,16 @@ k8s-scan: ## Ejecutar scanner en entorno K8s
 k8s-clean: ## Limpiar recursos de Kubernetes
 	@echo "Limpiando recursos de Kubernetes..."
 	@bash scripts/k8s-clean.sh
+
+compare: ## Comparar reportes Compose vs K8s
+	@echo "Comparando reportes..."
+	@if [ ! -f "reports/compose-connectivity.json" ] || [ ! -f "reports/k8s-connectivity.json" ]; then \
+		echo "ERROR: Faltan reportes. Ejecuta primero:"; \
+		echo "  make compose-scan"; \
+		echo "  make k8s-scan"; \
+		exit 1; \
+	fi
+	@$(PYTHON_VENV) scripts/compare-reports.py
 
 clean: ## Limpiar archivos temporales y reportes
 	@echo "Limpiando archivos temporales..."
