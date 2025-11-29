@@ -6,6 +6,7 @@ Escanea servicios para validar segmentacion de red.
 """
 
 import json
+import os
 import socket
 import sys
 from datetime import datetime
@@ -45,18 +46,30 @@ def scan_target(host, port, timeout=2):
 def main():
     """Ejecuta el escaneo y genera reporte JSON."""
 
-    # Targets a escanear
-    targets = [
-        ("frontend", 8080, "Frontend Flask"),
-        ("backend", 5000, "Backend API"),
-        ("backend", 5432, "Backend DB (simulado)"),
-    ]
+    # Detectar entorno
+    scan_mode = os.getenv("SCAN_MODE", "compose")
+    
+    # Targets según entorno
+    if scan_mode == "kubernetes":
+        targets = [
+            ("frontend.zero-trust-lab.svc.cluster.local", 8080, "Frontend Flask"),
+            ("backend.zero-trust-lab.svc.cluster.local", 5000, "Backend API"),
+            ("backend.zero-trust-lab.svc.cluster.local", 5432, "Backend DB (simulado)"),
+        ]
+    else:
+        # Targets originales para Docker Compose
+        targets = [
+            ("frontend", 8080, "Frontend Flask"),
+            ("backend", 5000, "Backend API"),
+            ("backend", 5432, "Backend DB (simulado)"),
+        ]
 
     # Mensaje de inicio en stderr
     print("=" * 60, file=sys.stderr)
     print("Network Scanner - Zero Trust Network Sandbox", file=sys.stderr)
     print("=" * 60, file=sys.stderr)
     print(f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", file=sys.stderr)
+    print(f"Entorno: {scan_mode}", file=sys.stderr)
     print(f"Total de targets: {len(targets)}", file=sys.stderr)
     print("", file=sys.stderr)
 
